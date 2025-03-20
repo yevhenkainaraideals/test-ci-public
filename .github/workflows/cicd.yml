@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [development, staging, production]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,10 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [qa, uat, prod]
-    environment: ${{ matrix.environment }}  # Triggers GitHub Environment approvals
+        environment: [development, staging, production]
+    environment: ${{ matrix.environment }}  # Enables GitHub Environment approvals
+
+    # ✅ Correctly calling the reusable workflow
     uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/deploy.yml@main
     with:
+      environment: ${{ matrix.environment }}
       aws_region: ${{ vars.AWS_REGION }}
       resource_prefix: ${{ vars.RESOURCE_PREFIX }}
     secrets:
