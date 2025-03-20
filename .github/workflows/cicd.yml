@@ -26,12 +26,5 @@ jobs:
 
   deploy:
     needs: build
-    strategy:
-      matrix:
-        environment: [development, staging, production]
-
-    # ✅ Calls the reusable workflow
-    uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/deploy.yml@main
-    with:
-      environment: ${{ matrix.environment }}
+    uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/shared-deployment.yml@main
     secrets: inherit  # ✅ Passes all repository secrets automatically
