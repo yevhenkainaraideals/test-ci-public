@@ -29,11 +29,9 @@ jobs:
     strategy:
       matrix:
         environment: [development, staging, production]
-    # ✅ Calls the reusable deployment workflow
+
+    # ✅ Calls the reusable workflow
     uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/deploy.yml@main
     with:
       environment: ${{ matrix.environment }}
-      aws_region: ${{ vars.AWS_REGION }}
-      resource_prefix: ${{ vars.RESOURCE_PREFIX }}
-    secrets:
-      AWS_SECRET: ${{ secrets.AWS_SECRET }}
+    secrets: inherit  # ✅ Passes all repository secrets automatically
