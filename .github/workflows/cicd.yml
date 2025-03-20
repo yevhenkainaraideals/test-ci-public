@@ -21,28 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [qa, uat, prod]  # Loop over environments
-    environment: ${{ matrix.environment }}  # Assign GitHub environment for approvals
-    steps:
-      - name: Checkout config repository
-        uses: actions/checkout@v4
-        with:
-          repository: yevhenkainaraideals/github-pipeline-templates-public  # Centralized repo
-          path: configs
-
-      - name: Load Environment Config
-        id: config
-        run: |
-          ENV_CONFIG=$(yq eval '.environments["${{ matrix.environment }}"]' configs/.github/configs/environments.yml)
-          echo "AWS_REGION=$(echo $ENV_CONFIG | yq eval '.aws_region' -)" >> $GITHUB_ENV
-          echo "RESOURCE_PREFIX=$(echo $ENV_CONFIG | yq eval '.resource_prefix' -)" >> $GITHUB_ENV
-          echo "AUTO_DEPLOY=$(echo $ENV_CONFIG | yq eval '.auto_deploy' -)" >> $GITHUB_ENV
-
-      - name: Conditional Deployment Trigger
-        if: env.AUTO_DEPLOY == 'true' || github.event_name == 'workflow_dispatch'
-        uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/deploy.yml@main
-        with:
-          aws_region: ${{ env.AWS_REGION }}
-          resource_prefix: ${{ env.RESOURCE_PREFIX }}
-        secrets:
-          AWS_SECRET: ${{ secrets.AWS_SECRET }}
+        environment: [qa, uat, prod]
+    environment: ${{ matrix.environment }}  # Triggers GitHub Environment approvals
+    uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/deploy.yml@main
+    with:
+      aws_region: ${{ vars.AWS_REGION }}
+      resource_prefix: ${{ vars.RESOURCE_PREFIX }}
+    secrets:
+      AWS_SECRET: ${{ secrets.AWS_SECRET }}
