@@ -26,6 +26,6 @@ jobs:
 
   deploy:
     needs: build
-    uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/shared-deployment.yml@main
+    uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/regional-deployment.yml@main
     secrets: inherit  # ✅ Passes all repository secrets automatically
 
