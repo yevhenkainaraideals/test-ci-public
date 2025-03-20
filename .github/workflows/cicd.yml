@@ -29,8 +29,6 @@ jobs:
     strategy:
       matrix:
         environment: [development, staging, production]
-    environment: ${{ matrix.environment }}  # Enables GitHub Environment approvals
-
     # ✅ Calls the reusable deployment workflow
     uses: yevhenkainaraideals/github-pipeline-templates-public/.github/workflows/deploy.yml@main
     with:
